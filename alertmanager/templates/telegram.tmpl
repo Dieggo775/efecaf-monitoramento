@@ -1,0 +1,7 @@
+{{ define "telegram.efecaf" }}{{ range .Alerts }}{{ if eq .Status "firing" }}🚨 <b>ALERTA: {{ .Labels.alertname }}</b>{{ else }}✅ <b>RESOLVIDO: {{ .Labels.alertname }}</b>{{ end }}
+Severidade: {{ .Labels.severity }}
+{{ .Annotations.summary }}
+{{ .Annotations.description }}
+Início: {{ .StartsAt.Format "02/01/2006 15:04:05" }} (UTC)
+
+{{ end }}{{ end }}

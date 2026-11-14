@@ -1,0 +1,38 @@
+global:
+  scrape_interval: 5s       # busca as métricas a cada 5 segundos
+  evaluation_interval: 5s   # avalia as regras de alerta a cada 5 segundos
+
+rule_files:
+  - /etc/prometheus/alertas.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  # 1) A loja: métricas internas expostas pelo Spring Boot Actuator
+  - job_name: efecaf-app
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["app:8080"]
+
+  # 2) Teste "de fora", como um cliente: o site responde?
+  - job_name: blackbox
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: ["http://app:8080/actuator/health/liveness"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+
+  # 3) O próprio Prometheus
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

@@ -1,0 +1,82 @@
+# Regras de alerta da E-Fecaf Global.
+# O campo "for" é quanto tempo a condição precisa durar antes de disparar
+# (evita alarme falso por um pico de poucos segundos).
+# Os tempos estão CURTOS para a demonstração; o recomendado para produção está no comentário.
+
+groups:
+  - name: efecaf-disponibilidade
+    rules:
+      - alert: SiteForaDoAr
+        expr: probe_success{job="blackbox"} == 0
+        for: 15s   # produção: 1m
+        labels:
+          severity: critico
+        annotations:
+          summary: "A loja E-Fecaf está FORA DO AR"
+          description: "O health check externo (Blackbox) está falhando em {{ $labels.instance }}."
+
+  - name: efecaf-desempenho
+    rules:
+      - alert: LatenciaAlta
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(http_server_requests_seconds_bucket{job="efecaf-app", uri!~"/actuator.*"}[1m]))) > 1
+        for: 30s   # produção: 5m
+        labels:
+          severity: aviso
+        annotations:
+          summary: "Tempo de resposta alto (p95 acima de 1s)"
+          description: "O p95 está em {{ $value | printf \"%.2f\" }}s. Clientes já sentem lentidão."
+
+      - alert: LatenciaCritica
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(http_server_requests_seconds_bucket{job="efecaf-app", uri!~"/actuator.*"}[1m]))) > 2
+        for: 30s   # produção: 2m
+        labels:
+          severity: critico
+        annotations:
+          summary: "Tempo de resposta CRÍTICO (p95 acima de 2s)"
+          description: "O p95 está em {{ $value | printf \"%.2f\" }}s. Risco alto de abandono de carrinho."
+
+      - alert: TaxaDeErrosAlta
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="efecaf-app", uri!~"/actuator.*", status=~"5.."}[1m]))
+            /
+          sum(rate(http_server_requests_seconds_count{job="efecaf-app", uri!~"/actuator.*"}[1m])) > 0.02
+        for: 30s   # produção: 5m
+        labels:
+          severity: critico
+        annotations:
+          summary: "Taxa de erros acima de 2%"
+          description: "{{ $value | humanizePercentage }} das requisições estão retornando erro 5xx."
+
+  - name: efecaf-saturacao
+    rules:
+      - alert: PoolDoBancoSaturado
+        expr: hikaricp_connections_active{job="efecaf-app"} / hikaricp_connections_max{job="efecaf-app"} >= 0.9
+        for: 30s   # produção: 5m
+        labels:
+          severity: critico
+        annotations:
+          summary: "Pool de conexões do banco saturado"
+          description: "{{ $value | humanizePercentage }} das conexões do banco estão em uso. Requisições estão esperando na fila."
+
+      - alert: CPUAlta
+        expr: process_cpu_usage{job="efecaf-app"} > 0.8
+        for: 1m    # produção: 10m
+        labels:
+          severity: aviso
+        annotations:
+          summary: "CPU da aplicação acima de 80%"
+          description: "CPU em {{ $value | humanizePercentage }}."
+
+      - alert: MemoriaAlta
+        expr: |
+          sum by (instance) (jvm_memory_used_bytes{job="efecaf-app", area="heap"})
+            /
+          sum by (instance) (jvm_memory_max_bytes{job="efecaf-app", area="heap"} > 0) > 0.85
+        for: 1m    # produção: 10m
+        labels:
+          severity: aviso
+        annotations:
+          summary: "Memória (heap) acima de 85%"
+          description: "Heap em {{ $value | humanizePercentage }}."

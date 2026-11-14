@@ -1,0 +1,105 @@
+# Laboratório de monitoramento da E-Fecaf Global.
+# Subir tudo:   docker compose up -d --build
+# Desligar:     docker compose down
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: loja
+      POSTGRES_USER: loja
+      POSTGRES_PASSWORD: loja
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loja -d loja"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    build: ./app
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/loja
+      DB_USER: loja
+      DB_PASSWORD: loja
+      DB_POOL_SIZE: "5"          # ETAPA 8: mude para "20"
+      DB_CONNECTION_TIMEOUT_MS: "2000"
+      PAYMENT_DELAY_MS: "300"
+    cpus: 1.0                    # ETAPA 8: mude para 2.0
+    mem_limit: 768m
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alertas.yml:/etc/prometheus/alertas.yml:ro
+      - promdata:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  blackbox:
+    image: prom/blackbox-exporter:v0.25.0
+    command:
+      - --config.file=/etc/blackbox/blackbox.yml
+    volumes:
+      - ./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml:ro
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./alertmanager/templates:/etc/alertmanager/templates:ro
+      - ./alertmanager/secrets:/etc/alertmanager/secrets:ro
+    ports:
+      - "9093:9093"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.2.2
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_USERS_DEFAULT_LANGUAGE: pt-BR
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    ports:
+      - "3002:3000"   # 3000 e 3001 já são usadas por outros projetos no servidor
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  locust:
+    image: locustio/locust:2.31.8
+    command: -f /mnt/locust/locustfile.py --host http://app:8080 --class-picker
+    volumes:
+      - ./locust:/mnt/locust:ro
+    ports:
+      - "8089:8089"
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  promdata:
+  grafanadata:
