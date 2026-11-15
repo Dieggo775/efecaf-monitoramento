@@ -215,5 +215,4 @@ réplicas de leitura e fila para o checkout.
 | Grafana "No data" | Gere tráfego no Locust e espere 30 s; confira os Targets |
 | Telegram não recebe | Mandou `/start`? Revise token/chat_id; `docker compose logs alertmanager` |
 | Quero recomeçar do zero | `docker compose down -v` (apaga banco e históricos) |
-#   e f e c a f - m o n i t o r a m e n t o  
- 
+#
