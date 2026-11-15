@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200
+
+spring:
+  application:
+    name: efecaf-loja
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/loja}
+    username: ${DB_USER:loja}
+    password: ${DB_PASSWORD:loja}
+    hikari:
+      pool-name: efecaf-pool
+      # GARGALO PROPOSITAL: só 5 conexões para a loja inteira.
+      # Na Etapa 8 (otimização) mude DB_POOL_SIZE para 20 no docker-compose.yml.
+      maximum-pool-size: ${DB_POOL_SIZE:5}
+      minimum-idle: ${DB_POOL_SIZE:5}
+      # Quanto tempo uma requisição espera por uma conexão livre antes de dar erro 500.
+      connection-timeout: ${DB_CONNECTION_TIMEOUT_MS:2000}
+
+loja:
+  pagamento:
+    # Tempo simulado de resposta do gateway de pagamento (ms).
+    latencia-ms: ${PAYMENT_DELAY_MS:300}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  metrics:
+    tags:
+      application: efecaf-loja
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      minimum-expected-value:
+        http.server.requests: 5ms
+      maximum-expected-value:
+        http.server.requests: 10s

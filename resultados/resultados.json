@@ -1,0 +1,450 @@
+{
+  "teste1_carga_normal": {
+    "inicio": 1794611059.06296,
+    "fim": 1794611239.0633507,
+    "locust": {
+      "requisicoes": 4299,
+      "falhas": 0,
+      "falhas_pct": 0.0,
+      "p95_ms": 340.0,
+      "rps_medio": 23.9,
+      "por_endpoint": {
+        "/api/busca": {
+          "p95_ms": 280.0,
+          "falhas": 0,
+          "req": 872
+        },
+        "/api/carrinho": {
+          "p95_ms": 9,
+          "falhas": 0,
+          "req": 550
+        },
+        "/api/checkout": {
+          "p95_ms": 370.0,
+          "falhas": 0,
+          "req": 284
+        },
+        "/api/produtos": {
+          "p95_ms": 9,
+          "falhas": 0,
+          "req": 1457
+        },
+        "/api/produtos/[id]": {
+          "p95_ms": 8,
+          "falhas": 0,
+          "req": 1136
+        }
+      }
+    },
+    "p95_max_s": 0.3269,
+    "erro_max_pct": 0.0,
+    "rps_max": 24.4,
+    "pool_em_uso_max": 4.0,
+    "pool_fila_max": 0.0,
+    "cpu_app_max_pct": 33.0,
+    "alertas_disparados": []
+  },
+  "teste2_black_friday_antes": {
+    "inicio": 1794611332.2533252,
+    "fim": 1794611637.0712872,
+    "pico_inicio": 1794611452.2533252,
+    "pico_fim": 1794611542.2533252,
+    "cpu_docker_no_pico": "app 64.85%\npostgres 189.19%",
+    "locust": {
+      "requisicoes": 21517,
+      "falhas": 6715,
+      "falhas_pct": 31.21,
+      "p95_ms": 4800.0,
+      "rps_medio": 70.6,
+      "por_endpoint": {
+        "/api/busca": {
+          "p95_ms": 4900.0,
+          "falhas": 1336,
+          "req": 4305
+        },
+        "/api/carrinho": {
+          "p95_ms": 4800.0,
+          "falhas": 919,
+          "req": 2890
+        },
+        "/api/checkout": {
+          "p95_ms": 5000.0,
+          "falhas": 433,
+          "req": 1371
+        },
+        "/api/produtos": {
+          "p95_ms": 4800.0,
+          "falhas": 2208,
+          "req": 7172
+        },
+        "/api/produtos/[id]": {
+          "p95_ms": 4800.0,
+          "falhas": 1819,
+          "req": 5779
+        }
+      }
+    },
+    "p95_max_s": 2.1853,
+    "erro_max_pct": 54.05,
+    "rps_max": 133.3091,
+    "pool_em_uso_max": 5.0,
+    "pool_fila_max": 194.0,
+    "cpu_app_max_pct": 53.6,
+    "alertas_disparados": [
+      "LatenciaAlta",
+      "LatenciaCritica",
+      "PoolDoBancoSaturado",
+      "TaxaDeErrosAlta"
+    ]
+  },
+  "teste3_estresse": {
+    "inicio": 1794611731.0655506,
+    "fim": 1794612006.495449,
+    "limite": {
+      "t": 20,
+      "usuarios": 420,
+      "rps": 72.9,
+      "falhas_pct_atual": 6.2,
+      "p95_ms_atual": 2200.0,
+      "momento": 1794611751.1536746
+    },
+    "amostras": [
+      {
+        "t": 10,
+        "usuarios": 220,
+        "rps": 45.2,
+        "falhas_pct_atual": 0.0,
+        "p95_ms_atual": 710.0
+      },
+      {
+        "t": 20,
+        "usuarios": 420,
+        "rps": 72.9,
+        "falhas_pct_atual": 6.2,
+        "p95_ms_atual": 2200.0
+      },
+      {
+        "t": 30,
+        "usuarios": 620,
+        "rps": 119.6,
+        "falhas_pct_atual": 44.6,
+        "p95_ms_atual": 2700.0
+      },
+      {
+        "t": 40,
+        "usuarios": 820,
+        "rps": 124.9,
+        "falhas_pct_atual": 54.8,
+        "p95_ms_atual": 4300.0
+      },
+      {
+        "t": 51,
+        "usuarios": 1020,
+        "rps": 126.6,
+        "falhas_pct_atual": 54.3,
+        "p95_ms_atual": 5600.0
+      },
+      {
+        "t": 61,
+        "usuarios": 1220,
+        "rps": 127.5,
+        "falhas_pct_atual": 53.2,
+        "p95_ms_atual": 6800.0
+      },
+      {
+        "t": 71,
+        "usuarios": 1420,
+        "rps": 126.1,
+        "falhas_pct_atual": 52.2,
+        "p95_ms_atual": 8400.0
+      },
+      {
+        "t": 81,
+        "usuarios": 1500,
+        "rps": 122.0,
+        "falhas_pct_atual": 55.5,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 91,
+        "usuarios": 1500,
+        "rps": 129.3,
+        "falhas_pct_atual": 52.4,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 102,
+        "usuarios": 1500,
+        "rps": 137.5,
+        "falhas_pct_atual": 47.7,
+        "p95_ms_atual": 9900.0
+      },
+      {
+        "t": 112,
+        "usuarios": 1500,
+        "rps": 128.8,
+        "falhas_pct_atual": 52.1,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 122,
+        "usuarios": 1500,
+        "rps": 126.3,
+        "falhas_pct_atual": 57.1,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 132,
+        "usuarios": 1500,
+        "rps": 130.0,
+        "falhas_pct_atual": 52.5,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 143,
+        "usuarios": 1500,
+        "rps": 124.0,
+        "falhas_pct_atual": 53.1,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 153,
+        "usuarios": 1500,
+        "rps": 132.3,
+        "falhas_pct_atual": 46.3,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 163,
+        "usuarios": 1500,
+        "rps": 128.5,
+        "falhas_pct_atual": 54.3,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 173,
+        "usuarios": 1500,
+        "rps": 130.1,
+        "falhas_pct_atual": 51.4,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 183,
+        "usuarios": 1500,
+        "rps": 130.7,
+        "falhas_pct_atual": 51.7,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 194,
+        "usuarios": 1500,
+        "rps": 133.6,
+        "falhas_pct_atual": 44.6,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 204,
+        "usuarios": 1500,
+        "rps": 129.4,
+        "falhas_pct_atual": 51.8,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 214,
+        "usuarios": 1500,
+        "rps": 127.6,
+        "falhas_pct_atual": 54.9,
+        "p95_ms_atual": 10000.0
+      },
+      {
+        "t": 224,
+        "usuarios": 1500,
+        "rps": 126.6,
+        "falhas_pct_atual": 54.0,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 234,
+        "usuarios": 1500,
+        "rps": 124.8,
+        "falhas_pct_atual": 52.2,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 245,
+        "usuarios": 1500,
+        "rps": 129.1,
+        "falhas_pct_atual": 47.8,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 255,
+        "usuarios": 1500,
+        "rps": 125.9,
+        "falhas_pct_atual": 56.9,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 265,
+        "usuarios": 1500,
+        "rps": 124.3,
+        "falhas_pct_atual": 57.3,
+        "p95_ms_atual": 11000.0
+      },
+      {
+        "t": 275,
+        "usuarios": 1500,
+        "rps": 125.3,
+        "falhas_pct_atual": 52.5,
+        "p95_ms_atual": 11000.0
+      }
+    ],
+    "locust": {
+      "requisicoes": 33952,
+      "falhas": 17296,
+      "falhas_pct": 50.94,
+      "p95_ms": 10000.0,
+      "rps_medio": 123.2,
+      "por_endpoint": {
+        "/api/busca": {
+          "p95_ms": 11000.0,
+          "falhas": 3476,
+          "req": 6822
+        },
+        "/api/carrinho": {
+          "p95_ms": 10000.0,
+          "falhas": 2339,
+          "req": 4537
+        },
+        "/api/checkout": {
+          "p95_ms": 11000.0,
+          "falhas": 1179,
+          "req": 2262
+        },
+        "/api/produtos": {
+          "p95_ms": 10000.0,
+          "falhas": 5773,
+          "req": 11271
+        },
+        "/api/produtos/[id]": {
+          "p95_ms": 10000.0,
+          "falhas": 4529,
+          "req": 9060
+        }
+      }
+    },
+    "p95_max_s": 2.2284,
+    "erro_max_pct": 54.42,
+    "rps_max": 112.9262,
+    "pool_em_uso_max": 5.0,
+    "pool_fila_max": 194.0,
+    "cpu_app_max_pct": 29.0,
+    "alertas_disparados": [
+      "LatenciaAlta",
+      "LatenciaCritica",
+      "SiteForaDoAr",
+      "TaxaDeErrosAlta"
+    ]
+  },
+  "etapa81_pool20_2cpu": {
+    "inicio": 1794612166.1786118,
+    "fim": 1794612470.4559057,
+    "pico_inicio": 1794612286.1786118,
+    "pico_fim": 1794612376.1786118,
+    "cpu_docker_no_pico": "app 26.30%\npostgres 322.70%",
+    "locust": {
+      "requisicoes": 20948,
+      "falhas": 5681,
+      "falhas_pct": 27.12,
+      "p95_ms": 5200.0,
+      "rps_medio": 68.8,
+      "por_endpoint": {
+        "/api/busca": {
+          "p95_ms": 6400.0,
+          "falhas": 1187,
+          "req": 4235
+        },
+        "/api/carrinho": {
+          "p95_ms": 5100.0,
+          "falhas": 780,
+          "req": 2774
+        },
+        "/api/checkout": {
+          "p95_ms": 5300.0,
+          "falhas": 375,
+          "req": 1297
+        },
+        "/api/produtos": {
+          "p95_ms": 5100.0,
+          "falhas": 1931,
+          "req": 7150
+        },
+        "/api/produtos/[id]": {
+          "p95_ms": 5100.0,
+          "falhas": 1408,
+          "req": 5492
+        }
+      }
+    },
+    "p95_max_s": 2.9114,
+    "erro_max_pct": 49.53,
+    "rps_max": 123.6,
+    "pool_em_uso_max": 20.0,
+    "pool_fila_max": 179.0,
+    "cpu_app_max_pct": 23.0,
+    "alertas_disparados": [
+      "LatenciaAlta",
+      "LatenciaCritica",
+      "PoolDoBancoSaturado",
+      "TaxaDeErrosAlta"
+    ]
+  },
+  "etapa82_indices": {
+    "inicio": 1794612581.0036914,
+    "fim": 1794612886.0548286,
+    "pico_inicio": 1794612701.0036914,
+    "pico_fim": 1794612791.0036914,
+    "cpu_docker_no_pico": "app 35.61%\npostgres 175.27%",
+    "locust": {
+      "requisicoes": 47869,
+      "falhas": 0,
+      "falhas_pct": 0.0,
+      "p95_ms": 310.0,
+      "rps_medio": 156.9,
+      "por_endpoint": {
+        "/api/busca": {
+          "p95_ms": 300.0,
+          "falhas": 0,
+          "req": 9518
+        },
+        "/api/carrinho": {
+          "p95_ms": 20,
+          "falhas": 0,
+          "req": 6323
+        },
+        "/api/checkout": {
+          "p95_ms": 370.0,
+          "falhas": 0,
+          "req": 3171
+        },
+        "/api/produtos": {
+          "p95_ms": 24,
+          "falhas": 0,
+          "req": 16067
+        },
+        "/api/produtos/[id]": {
+          "p95_ms": 18,
+          "falhas": 0,
+          "req": 12790
+        }
+      }
+    },
+    "p95_max_s": 0.316,
+    "erro_max_pct": 0.0,
+    "rps_max": 392.5818,
+    "pool_em_uso_max": 20.0,
+    "pool_fila_max": 29.0,
+    "cpu_app_max_pct": 21.7,
+    "alertas_disparados": []
+  }
+}

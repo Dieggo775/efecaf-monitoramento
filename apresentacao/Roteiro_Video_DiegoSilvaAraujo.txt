@@ -1,0 +1,43 @@
+ROTEIRO DO VÍDEO (cerca de 5 minutos)
+Leia com calma: cerca de 20 a 25 segundos por slide.
+
+SLIDE 1
+Olá, eu sou o Diego Silva Araujo e este é o meu trabalho de Quality Assurance. Vou mostrar como montei o monitoramento da E-Fecaf Global para a Black Friday e como ele ajudou a levar a taxa de falhas no pico de 31% para zero.
+
+SLIDE 2
+Na última Black Friday, a loja ficou lenta e caiu, mas a equipe não conseguiu descobrir a causa. Não havia métricas, histórico nem alertas. Ficaram sem resposta perguntas básicas: quais páginas ficaram lentas, se o problema era a aplicação ou o banco, com quantos clientes a loja começa a falhar e quando a equipe deveria ter sido avisada.
+
+SLIDE 3
+Para decidir o que medir, usei os quatro sinais de ouro do monitoramento: latência, com o percentil 95 do tempo de resposta; tráfego, em requisições por segundo; erros, o percentual de respostas 5xx; e saturação, principalmente o pool de conexões do banco. Além disso, o Blackbox testa a loja por fora, como um cliente faria.
+
+SLIDE 4
+A arquitetura tem sete serviços em contêineres Docker. O Locust simula os clientes acessando a loja em Spring Boot, que usa um banco PostgreSQL com 50 mil produtos. A loja expõe métricas que o Prometheus coleta a cada 5 segundos, e o Blackbox testa o site por fora. O Grafana desenha os painéis e, quando uma regra de alerta dispara, o Alertmanager manda a mensagem no Telegram. Tudo sobe com um único comando.
+
+SLIDE 5
+Este é o dashboard no Grafana, criado automaticamente quando o ambiente sobe. No topo fica o resumo executivo, que muda de verde para vermelho conforme os limites. Abaixo ficam o tráfego, os tempos de resposta, o p95 por endpoint, que mostra onde está o gargalo, e o pool de conexões do banco. Com carga normal, de 50 clientes, a loja ficou saudável: zero erros e p95 de 0,34 segundo.
+
+SLIDE 6
+Configurei sete alertas, divididos entre críticos e avisos: site fora do ar, latência alta e crítica, taxa de erros, pool do banco saturado, CPU e memória. Cada regra só dispara se a condição durar um tempo mínimo, o que evita alarme falso. No teste de queda, derrubei a loja: o alerta disparou em 30 segundos e chegou no Telegram, e o aviso de resolvido chegou 10 segundos depois que ela voltou.
+
+SLIDE 7
+Para os testes, usei o Locust. Cada cliente simulado navega na vitrine, busca, adiciona ao carrinho e compra. O principal teste é o Pico de Black Friday: 50 clientes, depois 200, um pico de 800 durante um minuto e meio e depois 100. Também fiz um teste de carga normal, um teste de estresse até 1.500 clientes e repeti o pico depois das otimizações.
+
+SLIDE 8
+Este é o resultado do pico. 31% das requisições falharam, o cliente esperou em média 4,8 segundos no percentil 95, e chegou a haver 194 requisições na fila esperando uma conexão com o banco. Os alertas de latência alta, latência crítica, taxa de erros e pool saturado dispararam sozinhos e chegaram no Telegram.
+
+SLIDE 9
+No teste de estresse, fui aumentando os clientes até 1.500. Com 220 clientes não houve falhas, mas com 420 os erros passaram de 5%. Esse é o limite atual. A loja não passa de cerca de 130 requisições por segundo e, com 1.500 clientes, até o health check externo falhou: para o cliente, o site caiu.
+
+SLIDE 10
+A primeira ideia foi o palpite óbvio: aumentar o pool de 5 para 20 conexões e dobrar a CPU. Não resolveu: as falhas só caíram de 31% para 27%. O monitoramento mostrou o motivo: a CPU do banco foi a 323%. A busca não tinha índice, então cada busca lia os 50 mil produtos. Com mais conexões, o banco só passou a fazer mais buscas pesadas ao mesmo tempo.
+
+SLIDE 11
+A correção certa foi criar índices na busca, usando trigramas do PostgreSQL. Cada busca caiu de 215 milissegundos para 2. No mesmo pico de 800 clientes, as falhas foram de 31% para zero, o p95 caiu para 0,31 segundo, a loja atendeu 2,9 vezes mais requisições por segundo e nenhum alerta disparou.
+
+SLIDE 12
+Para a próxima Black Friday, proponho outras melhorias: tirar a chamada ao pagamento de dentro da transação, usar uma fila no checkout, colocar o catálogo em cache no Redis, usar réplicas de leitura, escalar a aplicação com mais instâncias e, principalmente, rodar este teste de carga antes de cada evento.
+
+SLIDE 13
+Para concluir: sem monitoramento, a solução seria comprar mais servidores, o que não teria resolvido. Com ele, a loja ganhou visibilidade e alertas, a equipe passou a conhecer o limite da plataforma e as decisões passaram a ser tomadas com dados. O código está todo no GitHub. Obrigado!
+
+Total: 763 palavras, cerca de 5.5 minutos em ritmo normal de fala.

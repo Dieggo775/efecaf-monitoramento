@@ -1,0 +1,9 @@
+# Token do bot do Telegram: NUNCA vai para o GitHub
+alertmanager/secrets/telegram_token
+
+# Arquivos gerados
+app/target/
+**/__pycache__/
+*.zip
+prints/
+*.csv
